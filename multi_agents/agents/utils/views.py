@@ -1,6 +1,7 @@
 from colorama import Fore, Style
 from enum import Enum
 
+callbackfunc  = None
 
 class AgentColor(Enum):
     RESEARCHER = Fore.LIGHTBLUE_EX
@@ -11,6 +12,12 @@ class AgentColor(Enum):
     REVISOR = Fore.LIGHTWHITE_EX
     MASTER = Fore.LIGHTYELLOW_EX
 
+def set_callback_func(func):
+    global callbackfunc
+    callbackfunc = func
 
 def print_agent_output(output:str, agent: str="RESEARCHER"):
-    print(f"{AgentColor[agent].value}{agent}: {output}{Style.RESET_ALL}")
+    if callbackfunc is None:
+        print(f"{AgentColor[agent].value}{agent}: {output}{Style.RESET_ALL}")
+    else:
+        callbackfunc(agent, output)
